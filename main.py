@@ -1,16 +1,15 @@
 class TicTacToe:
     def __init__(self):
         self.board = [[" " for _ in range(3)] for _ in range(3)]
-        self.current_player = 0
-        self.winner = None
-        self.stalemate = False
+        self.current_player = 0  # 0 is O, 1 is X
+        self.game_over = False
 
     def display_board(self):
         print("\n")
         print(" | ".join(self.board[0]))
-        print("-" * 5)
+        print("--+---+--")
         print(" | ".join(self.board[1]))
-        print("-" * 5)
+        print("--+---+--")
         print(" | ".join(self.board[2]))
         print("\n")
 
@@ -33,16 +32,15 @@ class TicTacToe:
         return False
 
     def check_for_stalemate(self):
-        if any(" " in row for row in self.board):
-            return False
-        self.stalemate = True
-        return True
+        if all(cell != " " for row in self.board for cell in row):
+            return True
+        return False
 
     def next_turn(self):
         self.current_player = 1 - self.current_player
 
     def play(self):
-        while not self.winner and not self.stalemate:
+        while not self.game_over:
             self.display_board()
             move_valid = False
             while not move_valid:
@@ -50,17 +48,19 @@ class TicTacToe:
                 if len(move) == 2 and move[0].isdigit() and move[1].isdigit():
                     x, y = int(move[0]), int(move[1])
                     move_valid = self.validate_move(x, y) and self.place_mark(x, y)
+                else:
+                    print("Invalid input. Please enter two numbers separated by space (e.g., 1 2).")
 
             if self.check_for_win():
-                self.winner = self.current_player
+                self.display_board()
                 print(f"Player {self.current_player + 1} ({'O' if self.current_player == 0 else 'X'}) wins!")
-                self.display_board()
+                self.game_over = True
             elif self.check_for_stalemate():
-                print("Stalemate!")
                 self.display_board()
+                print("Stalemate!")
+                self.game_over = True
             else:
                 self.next_turn()
-
 
 if __name__ == '__main__':
     game = TicTacToe()
