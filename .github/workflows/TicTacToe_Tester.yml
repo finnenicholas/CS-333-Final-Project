@@ -23,3 +23,14 @@ jobs:
     - name: Test with pytest
       run: |
         pytest
+    - name: Run tests with coverage
+      run: |
+        coverage run -m pytest
+        coverage report
+        coverage xml  # If you need XML reports for further integrations
+
+    - name: Upload coverage to a coverage reporting service
+      uses: actions/upload-artifact@v2
+      with:
+        name: coverage-report
+        path: coverage.xml  # or htmlcov/ if uploading HTML reports
