@@ -1,79 +1,67 @@
-def main():
-  player = 0
-  winner = False
-  board = [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]
-  stalemate = False
-  while not winner and not stalemate:
-    valid_move = False
-    move = None
-    display_board(board)
-    while not valid_move:
-      move = input(f"{player + 1}: Enter your move: ")
-      valid_move = validate_move(player, board, move)
-    board = place_mark(player, board, move)
-    stalement = check_for_stalemate(board)
+class TicTacToe:
+    def __init__(self):
+        self.board = [[" " for _ in range(3)] for _ in range(3)]
+        self.current_player = 0
+        self.winner = None
+        self.stalemate = False
 
-    if stalement:
-      print("Stalemate!")
+    def display_board(self):
+        print("\n")
+        print(" | ".join(self.board[0]))
+        print("-" * 5)
+        print(" | ".join(self.board[1]))
+        print("-" * 5)
+        print(" | ".join(self.board[2]))
+        print("\n")
 
-    winner = check_for_win(board)
-    player = 1 if player == 0 else 0
-    print("\n")
-
-  print(f"Player {player} wins!")
-
-
-def display_board(board) -> None:
-  for line in board:
-    print(line)
-
-
-def place_mark(player, board, position):
-  x, y = position
-  if player == 0:
-    board[int(x)][int(y)] = "O"
-  else:
-    board[int(x)][int(y)] = "X"
-  return board
-
-
-def validate_move(player, board, move) -> bool:
-  if move[0] not in ["0", "1", "2"] and move[1] not in ["0", "1", "2"]:
-    return False
-  else:
-    return True
-
-
-def check_for_win(board) -> bool:
-
-  #Checking Accross
-  for i, e in enumerate(board):
-    if (board[i][0] == board[i][1] == board[i][2] != " "):
-      return True
-
-  #Checking Down
-  for i, e in enumerate(board):
-    if (board[0][i] == board[1][i] == board[2][i] != " "):
-      return True
-
-  #Checking Diagonal
-  if (board[0][0] == board[1][1] == board[2][2] != " "):
-    return True
-
-  if (board[0][2] == board[1][1] == board[2][0] != " "):
-    return True
-
-  return False
-
-
-def check_for_stalemate(board) -> bool:
-  for i, e in enumerate(board):
-    for j, e in enumerate(board):
-      if board[i][j] == " ":
+    def place_mark(self, x, y):
+        if self.board[x][y] == " ":
+            self.board[x][y] = "O" if self.current_player == 0 else "X"
+            return True
         return False
-  return True
+
+    def validate_move(self, x, y):
+        return 0 <= x < 3 and 0 <= y < 3 and self.board[x][y] == " "
+
+    def check_for_win(self):
+        lines = self.board + [list(t) for t in zip(*self.board)]
+        lines.append([self.board[i][i] for i in range(3)])
+        lines.append([self.board[i][2 - i] for i in range(3)])
+        for line in lines:
+            if line.count(line[0]) == 3 and line[0] != " ":
+                return True
+        return False
+
+    def check_for_stalemate(self):
+        if any(" " in row for row in self.board):
+            return False
+        self.stalemate = True
+        return True
+
+    def next_turn(self):
+        self.current_player = 1 - self.current_player
+
+    def play(self):
+        while not self.winner and not self.stalemate:
+            self.display_board()
+            move_valid = False
+            while not move_valid:
+                move = input(f"Player {self.current_player + 1} ({'O' if self.current_player == 0 else 'X'}), enter your move (row col): ").split()
+                if len(move) == 2 and move[0].isdigit() and move[1].isdigit():
+                    x, y = int(move[0]), int(move[1])
+                    move_valid = self.validate_move(x, y) and self.place_mark(x, y)
+
+            if self.check_for_win():
+                self.winner = self.current_player
+                print(f"Player {self.current_player + 1} ({'O' if self.current_player == 0 else 'X'}) wins!")
+                self.display_board()
+            elif self.check_for_stalemate():
+                print("Stalemate!")
+                self.display_board()
+            else:
+                self.next_turn()
 
 
 if __name__ == '__main__':
-  main()
-
+    game = TicTacToe()
+    game.play()
