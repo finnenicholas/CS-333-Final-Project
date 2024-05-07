@@ -40,6 +40,8 @@ class TicTacToe:
         self.current_player = 1 - self.current_player
 
     def play(self):
+      print("Welcome to Nick's Tic Tac Toe Game!")
+      
         while not self.game_over:
             self.display_board()
             move_valid = False
