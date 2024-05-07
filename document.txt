@@ -1,0 +1,21 @@
+We changed the game to be in a while loop, waiting for either a winner or a stalemate to make it easier to test for both of those conditions. We also added a test for stalemates also ensuring the game ends with it. Instead of outputing and getting inputs inside a function we moved it to the main, and changed the prompt_move to validate_move. This validate_move functions allows for us to test the placements on the board better than before ensuring the function and place_maker function are working. We are now able to test edge cases faster than before with the new functions.
+
+Function Coverage:
+test_accross_win
+test_vertical_win
+test_diagonal_win
+test_check_for_stalemate
+
+Edge Coverage:
+test_validate_move_edge_case
+
+
+Branch Coverage:
+test_place_mark_player_1
+test_place_mark_player_2
+
+Condition Coverage: 
+test_accross_win
+test_vertical_win
+test_diagonal_win
+test_check_for_stalemate
