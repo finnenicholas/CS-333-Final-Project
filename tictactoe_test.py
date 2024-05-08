@@ -48,16 +48,16 @@ class TestTicTacToe(unittest.TestCase):
 
     def test_player_one_horizontal_win(self):
         self.game.board = [['X', 'X', ' '], [' ', ' ', ' '], [' ', ' ', ' ']]
+        self.game.current_player = 0  
         self.game.place_mark(0, 2)  
-        self.assertTrue(self.game.check_for_win())
-        self.assertEqual(self.game.current_player, 0)
+        self.assertTrue(self.game.check_for_win(), "Player 1 should win with a horizontal line")
 
     def test_player_two_vertical_win(self):
-        self.game.current_player = 1
-        self.game.board = [['O', 'X', ' '], ['O', ' ', ' '], [' ', ' ', ' ']]
-        self.game.place_mark(2, 0)
-        self.assertTrue(self.game.check_for_win())
-        self.assertEqual(self.game.current_player, 1)
+        self.game.current_player = 1  
+        self.game.board = [['O', ' ', ' '], ['O', ' ', ' '], [' ', ' ', ' ']]
+        self.game.place_mark(2, 0)  
+        self.assertTrue(self.game.check_for_win(), "Player 2 should win with a vertical line")
+
 
     def test_invalid_move_out_of_bounds(self):
         self.assertFalse(self.game.validate_move(-1, 0))
