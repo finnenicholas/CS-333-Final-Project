@@ -6,7 +6,7 @@ class TestTicTacToe(unittest.TestCase):
         self.game = TicTacToe()
 
     def test_initial_board_empty(self):
-        self.assertEqual(self.game.board, [[' ']*3, [' ']*3, [' ']*3]) # That's cool how you can do the *3
+        self.assertEqual(self.game.board, [[' ']*3, [' ']*3, [' ']*3])
 
     def test_place_mark(self):
         self.assertTrue(self.game.place_mark(0, 0))
@@ -45,6 +45,32 @@ class TestTicTacToe(unittest.TestCase):
     def test_no_stalemate_if_moves_left(self):
         self.game.board = [['O', 'X', 'O'], ['O', ' ', 'X'], ['X', 'O', 'X']]
         self.assertFalse(self.game.check_for_stalemate())
+
+    def test_player_one_horizontal_win(self):
+        self.game.board = [['X', 'X', ' '], [' ', ' ', ' '], [' ', ' ', ' ']]
+        self.game.place_mark(0, 2)  
+        self.assertTrue(self.game.check_for_win())
+        self.assertEqual(self.game.current_player, 0)
+
+    def test_player_two_vertical_win(self):
+        self.game.current_player = 1
+        self.game.board = [['O', 'X', ' '], ['O', ' ', ' '], [' ', ' ', ' ']]
+        self.game.place_mark(2, 0)
+        self.assertTrue(self.game.check_for_win())
+        self.assertEqual(self.game.current_player, 1)
+
+    def test_invalid_move_out_of_bounds(self):
+        self.assertFalse(self.game.validate_move(-1, 0))
+        self.assertFalse(self.game.validate_move(0, 3)) 
+
+    def test_turn_switching(self):
+        self.assertEqual(self.game.current_player, 0)
+        self.game.place_mark(0, 0)
+        self.game.next_turn()
+        self.assertEqual(self.game.current_player, 1)
+        self.game.place_mark(0, 1)
+        self.game.next_turn()
+        self.assertEqual(self.game.current_player, 0)
 
 if __name__ == '__main__':
     unittest.main()
